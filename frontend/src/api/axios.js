@@ -1,15 +1,15 @@
-import axios from 'axios';
+
 
 // Algorithm:
 // Every request automatically gets:
 // 1. The base URL so we don't repeat it everywhere
 // 2. The token from localStorage attached to headers
+import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api'
 });
 
-// This runs before every request
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
