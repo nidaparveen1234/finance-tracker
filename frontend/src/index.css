@@ -1,9 +1,18 @@
+:root {
+  color-scheme: only light;
+}
+:root {
+  color-scheme: light;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+* {
+  -webkit-color-scheme: light dark;
+}
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #fdf6f0;
