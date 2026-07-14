@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from '../api/axios';
-// take add from front to back
+import { useTheme } from '../context/ThemeContext';
+
 const categories = ['food', 'groceries', 'transport', 'education', 'clothing', 'health', 'other'];
 
 const categoryEmoji = {
@@ -14,6 +15,7 @@ const categoryEmoji = {
 };
 
 const AddTransaction = ({ onAdd }) => {
+  const { colors } = useTheme();
   const [form, setForm] = useState({
     amount: '',
     category: 'food',
@@ -44,56 +46,56 @@ const AddTransaction = ({ onAdd }) => {
     width: '100%',
     padding: '0.75rem 1rem',
     borderRadius: '8px',
-    border: '1.5px solid #e8d5c4',
-    background: '#fffaf7',
+    border: `1.5px solid ${colors.border}`,
+    background: colors.inputBg,
     outline: 'none',
     fontSize: '0.95rem',
-    color: '#3d2c2c'
+    color: colors.text,
+    fontFamily: 'inherit'
   };
 
   const labelStyle = {
     display: 'block',
     marginBottom: '0.4rem',
     fontSize: '0.85rem',
-    color: '#7a5c52',
+    color: colors.subtext,
     fontWeight: '500'
   };
 
   return (
     <div style={{ marginBottom: '1.5rem' }}>
 
-      {/* Toggle button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
           style={{
             width: '100%',
             padding: '0.85rem',
-            background: '#c17c5a',
+            background: colors.accent,
             color: 'white',
             border: 'none',
             borderRadius: '12px',
             fontSize: '1rem',
-            fontWeight: '600'
+            fontWeight: '600',
+            cursor: 'pointer'
           }}
         >
           + Add Expense
         </button>
       )}
 
-      {/* Form */}
       {open && (
         <div style={{
-          background: 'white',
+          background: colors.card,
           padding: '1.5rem',
           borderRadius: '16px',
-          boxShadow: '0 4px 20px rgba(193,124,90,0.1)'
+          boxShadow: `0 4px 20px ${colors.shadow}`
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
-            <h3 style={{ margin: 0 }}>Add Expense</h3>
+            <h3 style={{ margin: 0, color: colors.text }}>Add Expense</h3>
             <button
               onClick={() => setOpen(false)}
-              style={{ background: 'none', border: 'none', fontSize: '1.2rem', color: '#9e7b6b', cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', fontSize: '1.2rem', color: colors.subtext, cursor: 'pointer' }}
             >
               ✕
             </button>
@@ -106,7 +108,6 @@ const AddTransaction = ({ onAdd }) => {
           )}
 
           <form onSubmit={handleSubmit}>
-
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
               <div>
                 <label style={labelStyle}>Amount (₹)</label>
@@ -165,17 +166,17 @@ const AddTransaction = ({ onAdd }) => {
               style={{
                 width: '100%',
                 padding: '0.85rem',
-                background: '#c17c5a',
+                background: colors.accent,
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '1rem',
-                fontWeight: '600'
+                fontWeight: '600',
+                cursor: 'pointer'
               }}
             >
               Save Expense
             </button>
-
           </form>
         </div>
       )}

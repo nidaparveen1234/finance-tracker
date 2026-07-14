@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from '../api/axios';
+import { useTheme } from '../context/ThemeContext';
 
 const Register = () => {
+  const { colors } = useTheme();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -29,21 +31,20 @@ const Register = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#fdf6f0'
+      background: colors.background
     }}>
       <div style={{
-        background: 'white',
+        background: colors.card,
         padding: '2.5rem',
         borderRadius: '16px',
-        boxShadow: '0 4px 20px rgba(193,124,90,0.1)',
+        boxShadow: `0 4px 20px ${colors.shadow}`,
         width: '100%',
         maxWidth: '400px'
       }}>
-
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{ fontSize: '2.5rem' }}>🌱</div>
-          <h2 style={{ marginTop: '0.5rem' }}>Create account</h2>
-          <p style={{ color: '#9e7b6b', fontSize: '0.9rem', marginTop: '0.3rem' }}>Start tracking your expenses</p>
+          <h2 style={{ marginTop: '0.5rem', color: colors.text }}>Create account</h2>
+          <p style={{ color: colors.subtext, fontSize: '0.9rem', marginTop: '0.3rem' }}>Start tracking your expenses</p>
         </div>
 
         {error && (
@@ -79,7 +80,7 @@ const Register = () => {
             { name: 'password', label: 'Password', type: 'password', placeholder: '••••••••' }
           ].map((field) => (
             <div key={field.name} style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#7a5c52' }}>
+              <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: colors.subtext }}>
                 {field.label}
               </label>
               <input
@@ -93,10 +94,11 @@ const Register = () => {
                   width: '100%',
                   padding: '0.75rem 1rem',
                   borderRadius: '8px',
-                  border: '1.5px solid #e8d5c4',
-                  background: '#fffaf7',
+                  border: `1.5px solid ${colors.border}`,
+                  background: colors.inputBg,
                   outline: 'none',
-                  fontSize: '0.95rem'
+                  fontSize: '0.95rem',
+                  color: colors.text
                 }}
               />
             </div>
@@ -107,23 +109,23 @@ const Register = () => {
             style={{
               width: '100%',
               padding: '0.85rem',
-              background: '#c17c5a',
+              background: colors.accent,
               color: 'white',
               border: 'none',
               borderRadius: '8px',
               fontSize: '1rem',
               fontWeight: '600',
-              marginTop: '0.5rem'
+              marginTop: '0.5rem',
+              cursor: 'pointer'
             }}
           >
             Create Account
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#9e7b6b' }}>
-          Already have an account? <Link to="/login">Login</Link>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: colors.subtext }}>
+          Already have an account? <Link to="/login" style={{ color: colors.accent }}>Login</Link>
         </p>
-
       </div>
     </div>
   );

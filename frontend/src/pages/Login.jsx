@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Login = () => {
+  const { colors } = useTheme();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -30,21 +32,20 @@ const Login = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#fdf6f0'
+      background: colors.background
     }}>
       <div style={{
-        background: 'white',
+        background: colors.card,
         padding: '2.5rem',
         borderRadius: '16px',
-        boxShadow: '0 4px 20px rgba(193,124,90,0.1)',
+        boxShadow: `0 4px 20px ${colors.shadow}`,
         width: '100%',
         maxWidth: '400px'
       }}>
-
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{ fontSize: '2.5rem' }}>🌿</div>
-          <h2 style={{ marginTop: '0.5rem' }}>Welcome back</h2>
-          <p style={{ color: '#9e7b6b', fontSize: '0.9rem', marginTop: '0.3rem' }}>Log in to your finance tracker</p>
+          <h2 style={{ marginTop: '0.5rem', color: colors.text }}>Welcome back</h2>
+          <p style={{ color: colors.subtext, fontSize: '0.9rem', marginTop: '0.3rem' }}>Log in to your finance tracker</p>
         </div>
 
         {error && (
@@ -62,7 +63,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#7a5c52' }}>Email</label>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: colors.subtext }}>Email</label>
             <input
               name="email"
               type="email"
@@ -74,16 +75,17 @@ const Login = () => {
                 width: '100%',
                 padding: '0.75rem 1rem',
                 borderRadius: '8px',
-                border: '1.5px solid #e8d5c4',
-                background: '#fffaf7',
+                border: `1.5px solid ${colors.border}`,
+                background: colors.inputBg,
                 outline: 'none',
-                fontSize: '0.95rem'
+                fontSize: '0.95rem',
+                color: colors.text
               }}
             />
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: '#7a5c52' }}>Password</label>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.9rem', color: colors.subtext }}>Password</label>
             <input
               name="password"
               type="password"
@@ -95,10 +97,11 @@ const Login = () => {
                 width: '100%',
                 padding: '0.75rem 1rem',
                 borderRadius: '8px',
-                border: '1.5px solid #e8d5c4',
-                background: '#fffaf7',
+                border: `1.5px solid ${colors.border}`,
+                background: colors.inputBg,
                 outline: 'none',
-                fontSize: '0.95rem'
+                fontSize: '0.95rem',
+                color: colors.text
               }}
             />
           </div>
@@ -108,23 +111,23 @@ const Login = () => {
             style={{
               width: '100%',
               padding: '0.85rem',
-              background: '#c17c5a',
+              background: colors.accent,
               color: 'white',
               border: 'none',
               borderRadius: '8px',
               fontSize: '1rem',
               fontWeight: '600',
-              letterSpacing: '0.3px'
+              letterSpacing: '0.3px',
+              cursor: 'pointer'
             }}
           >
             Login
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#9e7b6b' }}>
-          No account? <Link to="/register">Register here</Link>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: colors.subtext }}>
+          No account? <Link to="/register" style={{ color: colors.accent }}>Register here</Link>
         </p>
-
       </div>
     </div>
   );

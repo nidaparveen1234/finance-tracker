@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import axios from '../api/axios';
 import AddTransaction from '../components/AddTransaction';
 import TransactionList from '../components/TransactionList';
@@ -11,6 +12,7 @@ const categories = ['all', 'food', 'groceries', 'transport', 'education', 'cloth
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const { colors, isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [filter, setFilter] = useState('all');
@@ -40,10 +42,10 @@ const Dashboard = () => {
   };
 
   const handleUpdate = (updatedTransaction) => {
-  setTransactions(prev => prev.map(t =>
-    t._id === updatedTransaction._id ? updatedTransaction : t
-  )); // if id matches same no change or sent to backnd
-};
+    setTransactions(prev => prev.map(t =>
+      t._id === updatedTransaction._id ? updatedTransaction : t
+    ));
+  };
 
   const filteredTransactions = filter === 'all'
     ? transactions
@@ -57,33 +59,51 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ background: '#fdf6f0', minHeight: '100vh' }}>
+    <div style={{ background: colors.background, minHeight: '100vh', color: colors.text }}>
 
       {/* Navbar */}
-      <div className="navbar" style={{
-          background: 'white',
-          padding: '1rem 2rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          boxShadow: '0 2px 8px rgba(193,124,90,0.08)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 10
-        }}>
-        <h2 style={{ margin: 0, fontSize: '1.2rem' }}>🌿 Finance Tracker</h2>
+      <div style={{
+        background: colors.navbar,
+        padding: '1rem 2rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        boxShadow: `0 2px 8px ${colors.shadow}`,
+        position: 'sticky',
+        top: 0,
+        zIndex: 10
+      }}>
+        <h2 style={{ margin: 0, fontSize: '1.2rem', color: colors.text }}>🌿 Finance Tracker</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link to="/summary" style={{ fontSize: '0.9rem', color: '#c17c5a' }}>Monthly Summary</Link>
-          <span style={{ fontSize: '0.9rem', color: '#9e7b6b' }}>Hi, {user?.name} 👋</span>
+          <Link to="/summary" style={{ fontSize: '0.9rem', color: colors.accent }}>Monthly Summary</Link>
+          <span style={{ fontSize: '0.9rem', color: colors.subtext }}>Hi, {user?.name} 👋</span>
+
+          {/* Dark/light toggle button */}
+          <button
+            onClick={toggleTheme}
+            style={{
+              padding: '0.4rem 0.8rem',
+              background: 'none',
+              border: `1.5px solid ${colors.border}`,
+              borderRadius: '8px',
+              color: colors.text,
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
+
           <button
             onClick={handleLogout}
             style={{
               padding: '0.4rem 1rem',
               background: 'none',
-              border: '1.5px solid #e8d5c4',
+              border: `1.5px solid ${colors.border}`,
               borderRadius: '8px',
-              color: '#c17c5a',
-              fontSize: '0.85rem'
+              color: colors.accent,
+              fontSize: '0.85rem',
+              cursor: 'pointer'
             }}
           >
             Logout
@@ -92,15 +112,16 @@ const Dashboard = () => {
       </div>
 
       {/* Main content */}
-        <div className="main-content" style={{ maxWidth: '700px', margin: '0 auto', padding: '2rem 1rem' }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto', padding: '2rem 1rem' }}>
+
         {/* Total card */}
-        <div className="total-card" style={{
-          background: '#c17c5a',
+        <div style={{
+          background: colors.totalCard,
           color: 'white',
           padding: '1.5rem 2rem',
           borderRadius: '16px',
           marginBottom: '1.5rem',
-          boxShadow: '0 4px 15px rgba(193,124,90,0.3)'
+          boxShadow: `0 4px 15px ${colors.shadow}`
         }}>
           <p style={{ margin: 0, opacity: 0.85, fontSize: '0.9rem' }}>
             {filter === 'all' ? 'Total spent' : `Total in ${filter}`}
@@ -123,10 +144,11 @@ const Dashboard = () => {
                 border: 'none',
                 fontSize: '0.85rem',
                 textTransform: 'capitalize',
-                background: filter === cat ? '#c17c5a' : 'white',
-                color: filter === cat ? 'white' : '#7a5c52',
-                boxShadow: '0 1px 4px rgba(193,124,90,0.1)',
-                fontWeight: filter === cat ? '600' : '400'
+                background: filter === cat ? colors.filterActive : colors.filterInactive,
+                color: filter === cat ? 'white' : colors.filterInactiveText,
+                boxShadow: `0 1px 4px ${colors.shadow}`,
+                fontWeight: filter === cat ? '600' : '400',
+                cursor: 'pointer'
               }}
             >
               {cat}
@@ -136,26 +158,26 @@ const Dashboard = () => {
 
         {/* Transaction list */}
         {loading ? (
-         <Spinner message="Fetching your expenses..." />
+          <Spinner message="Fetching your expenses..." />
         ) : transactions.length === 0 ? (
-         <EmptyState
-          emoji="💸"
-          message="No expenses yet"
-          subMessage="Add your first expense above!"
-         />
+          <EmptyState
+            emoji="💸"
+            message="No expenses yet"
+            subMessage="Add your first expense above!"
+          />
         ) : filteredTransactions.length === 0 ? (
-        <EmptyState
-          emoji="🔍"
-         message={`No expenses in ${filter}`}
-         subMessage="Try a different category"
-         />
+          <EmptyState
+            emoji="🔍"
+            message={`No expenses in ${filter}`}
+            subMessage="Try a different category"
+          />
         ) : (
-        <TransactionList
-         transactions={filteredTransactions}
-         onDelete={handleDelete}
-         onUpdate={handleUpdate}
-        />
-)}
+          <TransactionList
+            transactions={filteredTransactions}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+          />
+        )}
 
       </div>
     </div>
